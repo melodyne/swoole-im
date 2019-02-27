@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>共读园web聊天室demo</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div style="width:600px;margin:0 auto;border:1px solid #ccc;">
+    <div id="content" style="overflow-y:auto;height:300px;"></div>
+    <hr/>
+    <div style="margin:10px 0">
+        <input type="text" name="room_id" placeholder="输入直播ID"  style="margin-left:10px;height:25px;width:150px;">
+        <button id="join_room_btn" onclick="joinRoom()" style="height:28px;width:100px;">加入聊天室</button>
+    </div>
+    <div id="room_msg" style="margin: 10px"></div>
+    <div style="height:40px">
+        <input type="text" id="message"  style="margin-left:10px;height:25px;width:450px;">
+        <button id="send_msg" onclick="sendMessage()" style="height:28px;width:75px;">发送</button>
+    </div>
+</div>
+</body>
+<script>
+    let wsServer = 'ws://127.0.0.1:9501';
+    const token = 'Gh5oQSP6Qe9ne1OCP7nG7RTCPPVNGldo_1547607509';// 本地
+
+    // let wsServer = 'ws://47.106.133.192:9501';
+    // const token = 'Ma7QgnrFGKTNKfaCsBFIcW1iUuhUxdF7_1550713539';
+
+    const user_id = '22';
+    const source = 'WxPublic';
+    let protocol = [token + '&' + user_id + '&' + source];// 子协议
+
+    let room_id = null;
+    $('#send_msg').attr('disabled',true);
+
+    let websocket = new WebSocket(wsServer,protocol);
+    websocket.onopen = function (evt) {
+        console.log("Connected to WebSocket server.");
+    };
+
+    websocket.onclose = function (evt) {
+        console.log("Disconnected");
+    };
+
+    websocket.onmessage = function (evt) {
+        console.log('Retrieved data from server: ' + evt.data);
+        let content = document.getElementById('content');
+        if(event.data instanceof Blob) {
+
+            let img = document.createElement("img");
+            img.src = window.URL.createObjectURL(event.data);
+            content.appendChild(img);
+        }else {
+            content.innerHTML = content.innerHTML.concat('<p style="margin-left:20px;height:20px;line-height:20px;">用户id-'+event.data+'</p>');
+        }
+
+        // 处理接收的消息
+        let param = JSON.parse(evt.data);
+        if(param['code']!=0){
+            alert(param['msg']);
+        }
+        // if(param['action']=='room/create'){
+        //     $('#create_room_btn').attr('disabled',true);
+        //     $('#join_room_btn').attr('disabled',true);
+        //     $('#send_msg').attr('disabled',false);
+        //     room_id = param.data.room_id;
+        // }
+
+        if(param['action']=='room/join'){
+            $('#create_room_btn').attr('disabled',true);
+            $('#join_room_btn').attr('disabled',true);
+            $('#send_msg').attr('disabled',false);
+            room_id = param.data.roomId;
+            $('#room_msg').html('你加入了：[' + param.data.title+']的聊天室，房间ID：' + param.data.roomId);
+        }
+
+        if(param['action']=='chat/by_group'){
+
+        }
+    };
+
+    websocket.onerror = function (evt, e) {
+        console.log('Error occured: ' + evt.data);
+    };
+
+    // 群聊
+    function sendMessage() {
+        send({
+            action:'chat/by_group',
+            data:{
+                type:1,// 文字
+                content:document.getElementById('message').value
+            }
+        });
+        document.getElementById('message').value = '';
+    }
+
+
+    // 单聊，私聊不需要创建房间，直接传对方user_id即可
+    function singleChat() {
+        send({
+            action:'chat/by_single',
+            data:{
+                user_id:'22',
+                type:1,// 文字
+                content:document.getElementById('message').value
+            }
+        });
+        document.getElementById('message').value = '';
+    }
+
+    // 创建了聊天室
+    // function createRoom() {
+    //     send({
+    //         action:'create_room',
+    //         data:{
+    //             live_id: $('input[name=live_id]').val(),// 直播id
+    //         }
+    //     });
+    // }
+
+    // 加入聊天室
+    function joinRoom() {
+       send({
+           action:'room/join',
+           data:{
+               room_id:$('input[name=room_id]').val(),
+           }
+       });
+    }
+
+    function send(param) {
+        websocket.send(JSON.stringify(param));
+    }
+</script>
+</html>
