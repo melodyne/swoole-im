@@ -33,16 +33,16 @@
 
 `ChartMsg类`：聊天信息处理，包括存储，类型处理
 
-WebSocket客户端
+### WebSocket客户端
 这个就很简单啦！不作描述
 
 
-二、具体实现
+### 二、具体实现
 
-2.1 目录结构
+#### 2.1 目录结构
 ![](https://github.com/melodyne/swoole_im/blob/master/doc/%E5%9B%BE%E7%89%871.png?raw=true)
 
 
-2.2 Yii 命令模块的chat控制器
+#### 2.2 Yii 命令模块的chat控制器
 ![](https://github.com/melodyne/swoole_im/blob/master/doc/%E5%9B%BE%E7%89%872.png?raw=true)
  
