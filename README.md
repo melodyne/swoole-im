@@ -20,15 +20,15 @@
 - 然后还要考虑做成linux服务的形式用systemctl来管理服务
 
 #### 采用面向对象的形式来写，代码读起来会比较清晰，设计如下核心类
-ChartServer类：管理websocket服务，信息收发管理
-ChartRoom类：聊天室管理，聊天室的用户组存储在redis中，一个直播间初始化一个聊天室
+`ChartServer类`：管理websocket服务，信息收发管理
+`ChartRoom类`：聊天室管理，聊天室的用户组存储在redis中，一个直播间初始化一个聊天室
 + 创建聊天室
 + 加入聊天室
 + 退出聊天室
 + 解散聊天室
 + 聊天室所有成员
 
-ChartMsg类：聊天信息处理，包括存储，类型处理
+`ChartMsg类`：聊天信息处理，包括存储，类型处理
 
 WebSocket客户端
 这个就很简单啦！不作描述
@@ -37,7 +37,9 @@ WebSocket客户端
 二、具体实现
 
 2.1 目录结构
+![](https://github.com/melodyne/swoole_im/blob/master/doc/%E5%9B%BE%E7%89%871.png?raw=true)
 
 
 2.2 Yii 命令模块的chat控制器
+![](https://github.com/melodyne/swoole_im/blob/master/doc/%E5%9B%BE%E7%89%872.png?raw=true)
  
