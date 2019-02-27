@@ -34,7 +34,7 @@
 `ChartMsg类`：聊天信息处理，包括存储，类型处理
 
 ### WebSocket客户端
-这个就很简单啦！不作描述
+这个就很简单啦！不作描述，详情见 [chat.html](https://github.com/melodyne/swoole_im/blob/master/chat.html)
 
 
 ### 二、具体实现

@@ -24,9 +24,6 @@
     let wsServer = 'ws://127.0.0.1:9501';
     const token = 'Gh5oQSP6Qe9ne1OCP7nG7RTCPPVNGldo_1547607509';// 本地
 
-    // let wsServer = 'ws://47.106.133.192:9501';
-    // const token = 'Ma7QgnrFGKTNKfaCsBFIcW1iUuhUxdF7_1550713539';
-
     const user_id = '22';
     const source = 'WxPublic';
     let protocol = [token + '&' + user_id + '&' + source];// 子协议
@@ -60,12 +57,12 @@
         if(param['code']!=0){
             alert(param['msg']);
         }
-        // if(param['action']=='room/create'){
-        //     $('#create_room_btn').attr('disabled',true);
-        //     $('#join_room_btn').attr('disabled',true);
-        //     $('#send_msg').attr('disabled',false);
-        //     room_id = param.data.room_id;
-        // }
+        if(param['action']=='room/create'){
+            $('#create_room_btn').attr('disabled',true);
+            $('#join_room_btn').attr('disabled',true);
+            $('#send_msg').attr('disabled',false);
+            room_id = param.data.room_id;
+        }
 
         if(param['action']=='room/join'){
             $('#create_room_btn').attr('disabled',true);
@@ -111,14 +108,14 @@
     }
 
     // 创建了聊天室
-    // function createRoom() {
-    //     send({
-    //         action:'create_room',
-    //         data:{
-    //             live_id: $('input[name=live_id]').val(),// 直播id
-    //         }
-    //     });
-    // }
+    function createRoom() {
+        send({
+            action:'create_room',
+            data:{
+                live_id: $('input[name=live_id]').val(),// 直播id
+            }
+        });
+    }
 
     // 加入聊天室
     function joinRoom() {
